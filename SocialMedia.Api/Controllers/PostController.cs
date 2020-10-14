@@ -16,10 +16,19 @@ namespace SocialMedia.Api.Controllers
             _repository = repository;
         }
 
+        //api/Post
         [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
             var post = await _repository.GetPosts();
+            return Ok(post);
+        }
+
+        //api/Post/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPostByUserId(int id)
+        {
+            var post = await _repository.GetPostByUserId(id);
             return Ok(post);
         }
     }

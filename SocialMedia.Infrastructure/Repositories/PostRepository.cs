@@ -3,6 +3,7 @@ using SocialMedia.Core.Data;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Data;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories
@@ -15,7 +16,13 @@ namespace SocialMedia.Infrastructure.Repositories
         {
             _context = context;
         }
-        
+
+        public async Task<Post> GetPostByUserId(int id)
+        {
+            var post = await _context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+            return post;
+        }
+
         public async Task<IEnumerable<Post>> GetPosts()
         {
             var posts = await _context.Posts.ToListAsync();
