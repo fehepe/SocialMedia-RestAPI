@@ -32,7 +32,6 @@ namespace SocialMedia.Api
             
             services.AddControllers();
 
-            //
             services.AddScoped<IPostRepository, PostRepository>();
 
             services.AddDbContext<SocialMediaContext>(opt =>
