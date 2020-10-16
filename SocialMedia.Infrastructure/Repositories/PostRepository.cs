@@ -35,9 +35,34 @@ namespace SocialMedia.Infrastructure.Repositories
             _context.Posts.Add(post);
         }
 
-        public async Task SaveChanges()
+        public async Task<bool> SaveChanges()
         {
-            await _context.SaveChangesAsync();
+            var rows = await _context.SaveChangesAsync();
+
+            return (rows > 0);
+        }
+
+        public async Task<bool> UpdatePost(Post post)
+        {
+            var currentPost = await GetPostByPostId(post.PostId);
+
+            currentPost.Date = post.Date;
+            currentPost.Description = post.Description;            
+            currentPost.Image = currentPost.Image;
+
+            var result = await SaveChanges();
+
+            return result;            
+        }
+
+        public async Task<bool> DeletePost(int id)
+        {
+            var currentPost = await GetPostByPostId(id);
+            _context.Remove(currentPost);
+
+            var result = await SaveChanges();
+
+            return result;
         }
     }
 }
