@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMedia.UnitTest", "Soc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMedia.IntegrationTest", "SocialMedia.IntegrationTest\SocialMedia.IntegrationTest.csproj", "{89C2A6BA-96A7-4F8B-85BB-6841C9F2C801}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMedia.Core", "SocialMedia.Core\SocialMedia.Core.csproj", "{66512A95-A862-4821-96C7-39842EABB6A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMedia.Infrastructure", "SocialMedia.Infrastructure\SocialMedia.Infrastructure.csproj", "{6FEC9141-C52E-4AE1-B8A1-219D20E35DA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMedia.Api", "SocialMedia.Api\SocialMedia.Api.csproj", "{7EFF4A54-6F07-46BA-AC80-94E6881B8EAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +29,18 @@ Global
 		{89C2A6BA-96A7-4F8B-85BB-6841C9F2C801}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89C2A6BA-96A7-4F8B-85BB-6841C9F2C801}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89C2A6BA-96A7-4F8B-85BB-6841C9F2C801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66512A95-A862-4821-96C7-39842EABB6A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66512A95-A862-4821-96C7-39842EABB6A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66512A95-A862-4821-96C7-39842EABB6A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66512A95-A862-4821-96C7-39842EABB6A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FEC9141-C52E-4AE1-B8A1-219D20E35DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FEC9141-C52E-4AE1-B8A1-219D20E35DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FEC9141-C52E-4AE1-B8A1-219D20E35DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FEC9141-C52E-4AE1-B8A1-219D20E35DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EFF4A54-6F07-46BA-AC80-94E6881B8EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EFF4A54-6F07-46BA-AC80-94E6881B8EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EFF4A54-6F07-46BA-AC80-94E6881B8EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EFF4A54-6F07-46BA-AC80-94E6881B8EAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
