@@ -17,5 +17,10 @@ namespace SocialMedia.Infrastructure.Repositories
         {
             return await _entities.Where(x => x.UserId == userId).ToListAsync();
         }
+
+
+
     }
+
+
 }

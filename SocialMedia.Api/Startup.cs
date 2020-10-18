@@ -59,6 +59,7 @@ namespace SocialMedia.Api
                 options.Filters.Add<GlobalExceptionFilter>();
                 options.Filters.Add<ValidationFilter>();
             }).AddFluentValidation(options => {
+                
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             });
 
