@@ -29,7 +29,10 @@ namespace SocialMedia.Api
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers().AddNewtonsoftJson(opt =>
+            services.AddControllers(option => 
+            {
+                
+            }).AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             })
@@ -53,6 +56,7 @@ namespace SocialMedia.Api
             //Aplication of validation filters
             services.AddMvc(options =>
             {
+                options.Filters.Add<GlobalExceptionFilter>();
                 options.Filters.Add<ValidationFilter>();
             }).AddFluentValidation(options => {
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
