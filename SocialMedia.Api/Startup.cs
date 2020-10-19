@@ -2,15 +2,18 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SocialMedia.Core.CustomEntities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Core.Services;
 using SocialMedia.Infrastructure.Data;
 using SocialMedia.Infrastructure.Filters;
 using SocialMedia.Infrastructure.Repositories;
+using SocialMedia.Infrastructure.Services;
 using System;
 
 namespace SocialMedia.Api
@@ -35,6 +38,7 @@ namespace SocialMedia.Api
             }).AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             })
             //For eliminate the model validation of apicontroller
             .ConfigureApiBehaviorOptions(opt => 
@@ -42,11 +46,19 @@ namespace SocialMedia.Api
                 //opt.SuppressModelStateInvalidFilter = true;
             });
 
-            
+            services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));
          
             services.AddScoped<IPostService, PostService>();
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<IUriService>(provider => 
+            {
+                var accesor = provider.GetRequiredService<IHttpContextAccessor>();
+                var request = accesor.HttpContext.Request;
+                var absoluteUri = string.Concat(request.Scheme,"://",request.Host.ToUriComponent());
+
+                return new UriService(absoluteUri);
+            });
 
             services.AddDbContext<SocialMediaContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("SocialMedia"))
