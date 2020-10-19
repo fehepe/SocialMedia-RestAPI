@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace SocialMedia.Api.Controllers
 {
+    [Produces("aplication/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class PostController : ControllerBase
@@ -21,7 +22,7 @@ namespace SocialMedia.Api.Controllers
         private readonly IPostService _postService;
         private readonly IMapper _mapper;
         private readonly IUriService _uriService;
-
+        
         public PostController(IPostService postService, IMapper mapper,IUriService uriService)
         {
             _postService = postService;
@@ -30,12 +31,16 @@ namespace SocialMedia.Api.Controllers
         }
 
         //api/Post
+        /// <summary>
+        /// Retrieve all posts
+        /// </summary>
+        /// <param name="filters">Filter to apply</param>
+        /// <returns></returns>
         [HttpGet(Name = nameof(GetPosts))]
         [ProducesResponseType((int)HttpStatusCode.OK,Type = typeof(ApiResponse<IEnumerable<PostDto>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiResponse<IEnumerable<PostDto>>))]
         public IActionResult GetPosts([FromQuery]PostQueryFilter filters)
         {
-
             var posts = _postService.GetPosts(filters);
 
             if (posts == null)
