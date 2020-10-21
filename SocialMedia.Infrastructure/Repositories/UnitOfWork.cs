@@ -1,10 +1,6 @@
 ﻿using SocialMedia.Core.Data;
-using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories
@@ -15,7 +11,7 @@ namespace SocialMedia.Infrastructure.Repositories
         private readonly IPostRepository _postRepository;
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<Comment> _commentRepository;        
-        private readonly IRepository<Security> _securityRepository;
+        private readonly ISecurityRepository _securityRepository;
 
         public UnitOfWork(SocialMediaContext socialMediaContext)
         {
@@ -26,7 +22,7 @@ namespace SocialMedia.Infrastructure.Repositories
         public IRepository<User> UserRepository => _userRepository ?? new BaseRepository<User>(_socialMediaContext);
 
         public IRepository<Comment> CommentRepository => _commentRepository ?? new BaseRepository<Comment>(_socialMediaContext);
-        public IRepository<Security> SecurityRepository => _securityRepository ?? new BaseRepository<Security>(_socialMediaContext);
+        public ISecurityRepository SecurityRepository => _securityRepository ?? new SecurityRepository(_socialMediaContext);
 
         public void Dispose()
         {

@@ -6,8 +6,10 @@ using SocialMedia.Api.Responses;
 using SocialMedia.Core.CustomEntities;
 using SocialMedia.Core.Data;
 using SocialMedia.Core.DTOs;
+using SocialMedia.Core.Enumerations;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Core.QueryFilters;
+using SocialMedia.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -119,6 +121,7 @@ namespace SocialMedia.Api.Controllers
         }
 
         //api/Post/{id}
+        [Authorize(Roles = nameof(RoleType.Administrator))]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {         

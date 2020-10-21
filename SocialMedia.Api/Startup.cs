@@ -1,26 +1,14 @@
 using AutoMapper;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using SocialMedia.Core.CustomEntities;
-using SocialMedia.Core.Interfaces;
-using SocialMedia.Core.Services;
-using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Extensions;
 using SocialMedia.Infrastructure.Filters;
-using SocialMedia.Infrastructure.Repositories;
-using SocialMedia.Infrastructure.Services;
 using System;
-using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace SocialMedia.Api
 {
@@ -38,65 +26,25 @@ namespace SocialMedia.Api
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers(option => 
+            services.AddControllers(option =>
             {
-                
+
             }).AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             })
             //For eliminate the model validation of apicontroller
-            .ConfigureApiBehaviorOptions(opt => 
+            .ConfigureApiBehaviorOptions(opt =>
             {
                 //opt.SuppressModelStateInvalidFilter = true;
             });
 
-            services.AddSwaggerGen(doc =>
-            {
-                doc.SwaggerDoc("v1",new OpenApiInfo { Title = "Social Media API", Version = "v1" });
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-                doc.IncludeXmlComments(xmlPath);
-            });
-
-            services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));          
-            services.AddScoped<IPostService, PostService>();
-            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddSingleton<IUriService>(provider => 
-            {
-                var accesor = provider.GetRequiredService<IHttpContextAccessor>();
-                var request = accesor.HttpContext.Request;
-                var absoluteUri = string.Concat(request.Scheme,"://",request.Host.ToUriComponent());
-
-                return new UriService(absoluteUri);
-            });
-
-            services.AddDbContext<SocialMediaContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("SocialMedia"))
-            );
-
-            services.AddAuthentication(options => 
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options => 
-            {
-                var secretKey = Configuration["Authentication:SecretKey"];
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Authentication:Issuer"],
-                    ValidAudience = Configuration["Authentication:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-                };
-            });
+            services.AddSwagger(Assembly.GetExecutingAssembly().GetName().Name);
+            services.AddOptions(Configuration);
+            services.AddServices();            
+            services.AddDbContex(Configuration);
+            services.AddJwtAuthentication(Configuration);
 
             //Aplication of validation filters
             services.AddMvc(options =>
@@ -124,8 +72,8 @@ namespace SocialMedia.Api
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("../swagger/v1/swagger.json", "Social Media API V1");
-                //options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Social Media API V1");
+                options.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();

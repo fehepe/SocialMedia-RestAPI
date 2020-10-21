@@ -18,7 +18,7 @@ namespace SocialMedia.Infrastructure.Data
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<User> Secutities { get; set; }
+        public virtual DbSet<User> Securities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

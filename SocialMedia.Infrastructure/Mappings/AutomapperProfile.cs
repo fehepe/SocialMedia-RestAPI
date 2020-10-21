@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SocialMedia.Core.Data;
 using SocialMedia.Core.DTOs;
+using SocialMedia.Core.Entities;
 
 namespace SocialMedia.Infrastructure.Mappings
 {
@@ -10,8 +11,8 @@ namespace SocialMedia.Infrastructure.Mappings
         {
             //Source --> Destination
 
-            CreateMap<Post, PostDto>();
-            CreateMap<PostDto, Post>();
+            CreateMap<Post, PostDto>().ReverseMap();
+            CreateMap<Security, SecurityDto>().ReverseMap();
 
         }
     }
