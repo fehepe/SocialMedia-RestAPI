@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialMedia.Core.CustomEntities;
 using SocialMedia.Core.Interfaces;
@@ -18,6 +20,7 @@ using SocialMedia.Infrastructure.Services;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace SocialMedia.Api
 {
@@ -76,6 +79,24 @@ namespace SocialMedia.Api
                 opt.UseSqlServer(Configuration.GetConnectionString("SocialMedia"))
             );
 
+            services.AddAuthentication(options => 
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => 
+            {
+                var secretKey = Configuration["Authentication:SecretKey"];
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Authentication:Issuer"],
+                    ValidAudience = Configuration["Authentication:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
 
             //Aplication of validation filters
             services.AddMvc(options =>
@@ -99,16 +120,19 @@ namespace SocialMedia.Api
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Social Media API V1");
-                options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("../swagger/v1/swagger.json", "Social Media API V1");
+                //options.RoutePrefix = string.Empty;
             });
-            app.UseAuthorization();
 
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

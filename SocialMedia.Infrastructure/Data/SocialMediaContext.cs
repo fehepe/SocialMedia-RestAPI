@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialMedia.Core.Data;
-using SocialMedia.Infrastructure.Data.Configurations;
+using System.Reflection;
 
 namespace SocialMedia.Infrastructure.Data
 {
@@ -18,10 +18,12 @@ namespace SocialMedia.Infrastructure.Data
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Secutities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SocialMediaContext).Assembly);
+            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(SocialMediaContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
